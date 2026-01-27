@@ -7,18 +7,18 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Registrar servicios de la aplicación.
      */
     public function register(): void
     {
-        //
+        // Aquí se podrían registrar servicios personalizados
     }
 
     /**
-     * Bootstrap any application services.
+     * Arranque de servicios de la aplicación.
      */
     public function boot(): void
     {
-        //
+        // Configuraciones globales si fueran necesarias
     }
 }
