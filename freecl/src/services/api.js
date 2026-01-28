@@ -57,13 +57,32 @@ export async function login(data) {
  * Registro
  */
 export async function register(data) {
-  const response = await fetch(`${API_URL}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  try {
+    const response = await fetch(`${API_URL}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
 
-  return response.json();
+    // Intenta parsear JSON, si falla (por HTML), devuelve error genérico
+    const json = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: json.message || "Error en registro",
+        errors: json.errors || null
+      };
+    }
+
+    return { success: true, ...json };
+  } catch (err) {
+    return { success: false, message: err.message || "Network error" };
+  }
 }
 
 /**

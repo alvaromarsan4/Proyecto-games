@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\ApiRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class RegisterRequest extends ApiRequest
 {
     /**
      * Autorizar la petición
@@ -25,4 +27,6 @@ class RegisterRequest extends FormRequest
             'password' => 'required|min:6|confirmed'
         ];
     }
+
+    // ...existing code...
 }

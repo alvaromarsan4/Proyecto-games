@@ -19,7 +19,6 @@ Route::prefix('api')->group(function () {
     Route::post('/import-games', [ImportController::class, 'import']);
 
     // Auth routes (use session cookie)
-    Route::post('/register', [RegisterController::class, 'register']);
     Route::post('/login', [LoginController::class, 'login']);
 
     // Favorites
