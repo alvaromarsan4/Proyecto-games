@@ -1,17 +1,33 @@
 "use client";
 
 import { useContext, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const { login } = useContext(AuthContext);
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await login(form);
-    if (!res.success) setError(res.message);
+    setError("");
+    setLoading(true);
+    try {
+      const res = await login(form);
+      if (!res.success) {
+        setError(res.message || "Error al iniciar sesión");
+      } else {
+        // redirect to home or wherever
+        router.push("/");
+      }
+    } catch (err) {
+      setError(err.message || "Error en la petición");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,7 +45,7 @@ export default function LoginPage() {
         required
         onChange={(e) => setForm({ ...form, password: e.target.value })}
       />
-      <button>Entrar</button>
+      <button disabled={loading}>{loading ? "Entrando..." : "Entrar"}</button>
       {error && <p>{error}</p>}
     </form>
   );

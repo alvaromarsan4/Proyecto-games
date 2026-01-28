@@ -32,14 +32,25 @@ export async function getGameById(id) {
  * Login
  */
 export async function login(data) {
-  const response = await fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-    credentials: "include",
-  });
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
 
-  return response.json();
+    const json = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return { success: false, message: json.message || "Error en login", errors: json.errors || null };
+    }
+
+    // Expecting backend to return user data in { user: { ... } } or similar
+    return { success: true, user: json.user || json };
+  } catch (err) {
+    return { success: false, message: err.message || "Network error" };
+  }
 }
 
 /**
@@ -53,4 +64,38 @@ export async function register(data) {
   });
 
   return response.json();
+}
+
+/**
+ * Obtener favoritos del usuario autenticado
+ */
+export async function getFavorites() {
+  try {
+    const res = await fetch(`${API_URL}/favorites`, {
+      credentials: "include",
+    });
+    if (!res.ok) return { success: false };
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+}
+
+/**
+ * Alternar favorito por external_id
+ */
+export async function toggleFavorite(external_id) {
+  try {
+    const res = await fetch(`${API_URL}/favorites`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ external_id }),
+    });
+    const json = await res.json();
+    return json;
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
 }

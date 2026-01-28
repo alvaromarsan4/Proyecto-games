@@ -1,31 +1,13 @@
 "use client";
+import Link from "next/link";
 
-import { useEffect, useState } from "react";
-import { getGames } from "@/services/api";
-import GameCard from "@/components/GameCard";
-import Filters from "@/components/Filters";
-
-export default function HomePage() {
-  const [games, setGames] = useState([]);
-  const [filters, setFilters] = useState({});
-
-  useEffect(() => {
-    getGames(filters).then((res) => setGames(res.data));
-  }, [filters]);
-
-  const handleFilter = (key, value) => {
-    setFilters({ ...filters, [key]: value });
-  };
-
+export default function LandingPage() {
   return (
-    <main>
-      <h1>Listado de juegos</h1>
-      <Filters onFilter={handleFilter} />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {games.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
-      </div>
+    <main className="p-8">
+      <h1 className="text-3xl font-bold mb-4">Bienvenido a Proyecto Games</h1>
+      <p className="mb-6">Explora información sobre juegos gratis y filtra por plataforma o género.</p>
+      <Link href="/games" className="inline-block bg-blue-600 text-white px-4 py-2 rounded">Ir al listado de juegos</Link>
     </main>
   );
 }
+
