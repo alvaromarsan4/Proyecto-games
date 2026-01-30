@@ -18,3 +18,4 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 // Note: authentication and favorites routes moved to web.php to ensure the
 // session middleware (StartSession) runs and the session store is available.
+
